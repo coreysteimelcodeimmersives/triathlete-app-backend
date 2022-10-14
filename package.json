@@ -1,0 +1,33 @@
+{
+  "name": "triathlete-app-backend",
+  "version": "1.0.0",
+  "description": "API for triathlete-app-backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coreysteimelcodeimmersives/triathlete-app-backend.git"
+  },
+  "author": "Corey Steimel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/coreysteimelcodeimmersives/triathlete-app-backend/issues"
+  },
+  "homepage": "https://github.com/coreysteimelcodeimmersives/triathlete-app-backend#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.6.5"
+  }
+}
