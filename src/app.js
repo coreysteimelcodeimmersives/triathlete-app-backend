@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const UserModel = require('../src/models/UserModel');
 const jwt = require('jsonwebtoken');
 const userRouter = require('./routes/userRouter');
+const workoutRouter = require('./routes/workoutRouter');
 const port = process.env.PORT;
 const app = express();
 
@@ -57,6 +58,8 @@ app.use(async (req, res, next) => {
 });
 
 app.use(userRouter);
+
+app.use(workoutRouter);
 
 // const errorHandler = (error, req, res, next) => {
 //   console.log('Error: ', error);
