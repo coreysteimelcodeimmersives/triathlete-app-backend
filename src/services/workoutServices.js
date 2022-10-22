@@ -1,3 +1,4 @@
+const UserModel = require('../models/UserModel');
 const WorkoutModel = require('../models/WorkoutModel');
 const { verifyUserIsAdmin } = require('./permissionServices');
 
@@ -41,6 +42,35 @@ const addWorkout = async (req, res, next) => {
   }
 };
 
+const updateWorkout = async (req, res, next) => {
+  try {
+    const { workoutData } = req.body;
+    verifyUserIsAdmin(req, res);
+    const filter = { _id: workoutData.id };
+    const update = { ...workoutData };
+    const opts = { new: true };
+    const updateWorkoutDocument = await WorkoutModel.findOneAndUpdate(
+      filter,
+      update,
+      opts
+    );
+    res.send({ workout: cleanWorkout(updateWorkoutDocument) });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteWorkout = async (req, res, next) => {
+  try {
+    const { workoutId } = req.body;
+    verifyUserIsAdmin(req, res);
+    await WorkoutModel.findByIdAndDelete(workoutId);
+    res.send({ mssg: 'Workout deleted' });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getWorkouts = async (req, res, next) => {
   try {
     const workouts = await WorkoutModel.find();
@@ -50,5 +80,10 @@ const getWorkouts = async (req, res, next) => {
   }
 };
 
-const WorkoutServices = { addWorkout, getWorkouts };
+const WorkoutServices = {
+  addWorkout,
+  getWorkouts,
+  updateWorkout,
+  deleteWorkout,
+};
 module.exports = WorkoutServices;
