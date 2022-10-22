@@ -1,4 +1,7 @@
-const { verifyUserLoggedIn } = require('./permissionServices');
+const {
+  verifyUserLoggedIn,
+  verifyUserIsAdmin,
+} = require('./permissionServices');
 const UserModel = require('../models/UserModel');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -80,5 +83,15 @@ const signIn = async (req, res, next) => {
   }
 };
 
-const UserServices = { signIn, signOut, registerUser, testAuth };
+const getAthletes = async (req, res, next) => {
+  try {
+    verifyUserIsAdmin(req, res);
+    const athletes = await UserModel.find({ isAdmin: false });
+    res.send({ athletes: athletes.map(cleanUser) });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const UserServices = { signIn, signOut, registerUser, testAuth, getAthletes };
 module.exports = UserServices;
