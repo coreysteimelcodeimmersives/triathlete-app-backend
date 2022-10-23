@@ -98,13 +98,66 @@ const addWorkout = async (req, res, next) => {
   try {
     const workoutData = req.body.workoutData;
     const athleteId = req.body.athleteId;
-    console.log(req.body.athleteId);
     verifyUserLoggedIn(req, res);
     const athlete = await UserModel.findOne({ _id: athleteId });
     if (!athlete) {
       return res.status(401).send('User not found or incorrect credentials');
     }
     athlete.workouts.push(workoutData);
+    await athlete.save();
+    res.send({ athlete: cleanUser(athlete) });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateWorkout = async (req, res, next) => {
+  try {
+    verifyUserLoggedIn(req, res);
+    const workoutData = req.body.workoutData;
+    const athleteId = req.body.athleteId;
+    const athlete = await UserModel.findOne({ _id: athleteId });
+    if (!athlete) {
+      return res.status(401).send('User not found or incorrect credentials');
+    }
+
+    console.log('workout data');
+    console.log(workoutData);
+
+    const updateWorkoutsArr = athlete.workouts.map((workout) => {
+      if (workout.id === workoutData.id) {
+        console.log('HERE!!!!!');
+        return workoutData;
+      } else {
+        return workout;
+      }
+    });
+    athlete.workouts = [...updateWorkoutsArr];
+    console.log('update arr');
+    console.log(updateWorkoutsArr);
+    await athlete.save();
+    res.send({ athlete: cleanUser(athlete) });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteWorkout = async (req, res, next) => {
+  try {
+    verifyUserLoggedIn(req, res);
+    const workoutId = req.body.workoutId;
+    const athleteId = req.body.athleteId;
+    const athlete = await UserModel.findOne({ _id: athleteId });
+    if (!athlete) {
+      return res.status(401).send('User not found or incorrect credentials');
+    }
+    athlete.workouts.filter((workout) => {
+      if (workout.id === workoutId) {
+        athlete.workouts.pull(workout);
+        return;
+      }
+      return workout;
+    });
     await athlete.save();
     res.send({ athlete: cleanUser(athlete) });
   } catch (error) {
@@ -119,5 +172,7 @@ const UserServices = {
   testAuth,
   getAthletes,
   addWorkout,
+  updateWorkout,
+  deleteWorkout,
 };
 module.exports = UserServices;

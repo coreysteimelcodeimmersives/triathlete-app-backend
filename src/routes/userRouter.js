@@ -7,6 +7,8 @@ const {
   testAuth,
   getAthletes,
   addWorkout,
+  updateWorkout,
+  deleteWorkout,
 } = require('../services/userServices');
 
 userRouter.get('/sign-out', signOut);
@@ -20,5 +22,9 @@ userRouter.post('/sign-in', signIn);
 userRouter.get('/get-athletes', getAthletes);
 
 userRouter.post('/athlete-add-workout', addWorkout);
+
+userRouter.post('/athlete-update-workout', updateWorkout);
+
+userRouter.post('/athlete-delete-workout', deleteWorkout);
 
 module.exports = userRouter;
