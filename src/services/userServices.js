@@ -15,6 +15,7 @@ const cleanUser = (userDocument) => {
     email: userDocument.email,
     profilePicture: userDocument.profilePicture,
     isAdmin: userDocument.isAdmin,
+    workouts: !userDocument.workouts ? [] : userDocument.workouts,
   };
 };
 
@@ -93,5 +94,30 @@ const getAthletes = async (req, res, next) => {
   }
 };
 
-const UserServices = { signIn, signOut, registerUser, testAuth, getAthletes };
+const addWorkout = async (req, res, next) => {
+  try {
+    const workoutData = req.body.workoutData;
+    const athleteId = req.body.athleteId;
+    console.log(req.body.athleteId);
+    verifyUserLoggedIn(req, res);
+    const athlete = await UserModel.findOne({ _id: athleteId });
+    if (!athlete) {
+      return res.status(401).send('User not found or incorrect credentials');
+    }
+    athlete.workouts.push(workoutData);
+    await athlete.save();
+    res.send({ athlete: cleanUser(athlete) });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const UserServices = {
+  signIn,
+  signOut,
+  registerUser,
+  testAuth,
+  getAthletes,
+  addWorkout,
+};
 module.exports = UserServices;

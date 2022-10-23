@@ -6,6 +6,7 @@ const {
   registerUser,
   testAuth,
   getAthletes,
+  addWorkout,
 } = require('../services/userServices');
 
 userRouter.get('/sign-out', signOut);
@@ -17,5 +18,7 @@ userRouter.post('/register-user', registerUser);
 userRouter.post('/sign-in', signIn);
 
 userRouter.get('/get-athletes', getAthletes);
+
+userRouter.post('/athlete-add-workout', addWorkout);
 
 module.exports = userRouter;
