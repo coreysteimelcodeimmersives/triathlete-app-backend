@@ -40,7 +40,6 @@ const testAuth = async (req, res, next) => {
 
 const registerUser = async (req, res, next) => {
   try {
-    console.log('req.body: ', req.body);
     const { firstName, lastName, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const userDocument = new UserModel({
@@ -126,15 +125,12 @@ const updateWorkout = async (req, res, next) => {
 
     const updateWorkoutsArr = athlete.workouts.map((workout) => {
       if (workout.id === workoutData.id) {
-        console.log('HERE!!!!!');
         return workoutData;
       } else {
         return workout;
       }
     });
     athlete.workouts = [...updateWorkoutsArr];
-    console.log('update arr');
-    console.log(updateWorkoutsArr);
     await athlete.save();
     res.send({ athlete: cleanUser(athlete) });
   } catch (error) {

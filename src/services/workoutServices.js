@@ -1,6 +1,9 @@
 const UserModel = require('../models/UserModel');
 const WorkoutModel = require('../models/WorkoutModel');
-const { verifyUserIsAdmin } = require('./permissionServices');
+const {
+  verifyUserIsAdmin,
+  verifyUserLoggedIn,
+} = require('./permissionServices');
 
 const cleanWorkout = (workoutDocument) => {
   return {
@@ -37,7 +40,6 @@ const addWorkout = async (req, res, next) => {
     await workoutDocument.save();
     res.send({ workout: cleanWorkout(workoutDocument) });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -73,6 +75,7 @@ const deleteWorkout = async (req, res, next) => {
 
 const getWorkouts = async (req, res, next) => {
   try {
+    verifyUserLoggedIn(req, res);
     const workouts = await WorkoutModel.find();
     res.send({ workouts: workouts.map(cleanWorkout) });
   } catch (error) {
