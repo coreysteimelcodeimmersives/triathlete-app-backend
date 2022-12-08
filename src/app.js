@@ -23,7 +23,7 @@ mongoose
 app.use(
   cors({
     credentials: true,
-    origin: 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN,
   })
 );
 
@@ -57,9 +57,9 @@ app.use(async (req, res, next) => {
   }
 });
 
-app.use(userRouter);
+app.use('/api/', userRouter);
 
-app.use(workoutRouter);
+app.use('/api/', workoutRouter);
 
 // const errorHandler = (error, req, res, next) => {
 //   console.log('Error: ', error);
